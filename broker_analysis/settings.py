@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-e^))uqha_h1gn=!0yxy_**qi##003l7^tdpq%p(c8^9rd13gta
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['broker-analysis.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
