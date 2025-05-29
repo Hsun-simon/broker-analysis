@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>券商 × 股票報酬查詢系統</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <!-- Chart.js 主套件 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js 注釋插件（用來畫紅色垂直線） -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>券商 × 股票報酬查詢系統</h1>
+
+    <form method="GET" class="query-form">
+      <label>選擇券商：</label>
+      <select name="broker">
+        {% for broker in brokers %}
+          <option value="{{ broker }}" {% if broker == selected_broker %}selected{% endif %}>{{ broker }}</option>
+        {% endfor %}
+      </select>
+
+      <label>報酬週期：</label>
+      <select name="days">
+        {% for d in days_options %}
+          <option value="{{ d }}" {% if d == selected_days %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">查詢</button>
+    </form>
+
+    {% if summary %}
+      <div class="summary">{{ summary }}</div>
+    {% endif %}
+
+    {% if table_data %}
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>股票</th>
+            <th>
+              <a href="?broker={{ selected_broker }}&days={{ selected_days }}&sort=mean&reverse={% if sort_by == 'mean' and not sort_reverse %}true{% else %}false{% endif %}">
+                平均報酬率
+              </a>
+            </th>
+            <th>
+              <a href="?broker={{ selected_broker }}&days={{ selected_days }}&sort=count&reverse={% if sort_by == 'count' and not sort_reverse %}true{% else %}false{% endif %}">
+                樣本數
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in table_data %}
+            <tr>
+			  <td>
+				<a href="?broker={{ selected_broker }}&days={{ selected_days }}&stock={{ row.id }}&sort={{ sort_by }}&reverse={% if sort_reverse %}true{% else %}false{% endif %}">
+				{{ row.name }}
+				</a>
+			  </td>
+              <td>{{ row.mean }}%</td>
+              <td>{{ row.count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    {% if line_data %}
+      <h2>該券商操作此股票期間的股價走勢圖</h2>
+      <div class="chart-container">
+        <canvas id="stockChart" width="800" height="400"></canvas>
+      </div>
+
+      <script>
+        const chartData = {{ line_data|safe }};
+        const ctx = document.getElementById('stockChart').getContext('2d');
+
+        // 建立買進日期的垂直紅線
+        const annotations = chartData.buy_dates.map(date => ({
+          type: 'line',
+          mode: 'vertical',
+          scaleID: 'x',
+          value: date,
+          borderColor: 'red',
+          borderWidth: 1,
+          borderDash: [5, 5],
+          label: {
+            content: '買進',
+            enabled: false
+          }
+        }));
+
+        const config = {
+          type: 'line',
+          data: {
+            labels: chartData.dates,
+            datasets: [
+              {
+                label: '收盤價',
+                data: chartData.prices,
+                borderColor: 'blue',
+                pointBackgroundColor: 'blue',
+                pointRadius: 2,
+                fill: false,
+                tension: 0.1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: chartData.stock_name + ' 股價走勢',
+                font: { size: 18 }
+              },
+              legend: { display: false },
+              annotation: {
+                annotations: annotations
+              }
+            },
+            scales: {
+              x: {
+                title: { display: true, text: '日期' }
+              },
+              y: {
+                title: { display: true, text: '收盤價' }
+              }
+            }
+          }
+        };
+
+        new Chart(ctx, config);
+      </script>
+    {% endif %}
+  </div>
+</body>
+</html>

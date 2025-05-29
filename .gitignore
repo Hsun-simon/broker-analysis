@@ -1,0 +1,15 @@
+# Python 快取
+__pycache__/
+*.pyc
+*.pyo
+
+# SQLite 資料庫檔
+*.db
+*.sqlite3
+
+# 匯入資料用的 Excel / CSV
+*.xlsx
+*.csv
+
+# 環境變數設定檔
+.env
