@@ -80,6 +80,8 @@ USE_TZ = True
 # ✅ 靜態檔案設定（讓 Render 找到 CSS / JS）
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "analysis", "static"),
+]
 # 預設主鍵欄位型態
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
