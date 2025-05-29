@@ -1,13 +1,11 @@
-import sqlite3
 import pandas as pd
 from django.shortcuts import render
+from django.db import connection
 
-# 讀取資料庫內容
+# 讀取資料庫內容（改用 Django 內建連線）
 def load_data():
-    conn = sqlite3.connect("project_data.db")
-    merged = pd.read_sql_query("SELECT * FROM merged", conn)
-    price = pd.read_sql_query("SELECT * FROM price", conn)
-    conn.close()
+    merged = pd.read_sql_query("SELECT * FROM merged", connection)
+    price = pd.read_sql_query("SELECT * FROM price", connection)
     merged['日期'] = pd.to_datetime(merged['日期'])
     price['日期'] = pd.to_datetime(price['日期'])
     return merged, price
@@ -63,7 +61,7 @@ def index(request):
                 for idx, row in df_group.iterrows()
             ]
 
-            # 改成 Chart.js 前端資料
+            # Chart.js 用資料
             if selected_stock and selected_stock in price['股票代號'].values:
                 df_stock = price[price['股票代號'] == selected_stock].sort_values('日期')
                 buy_dates = df[df['股票代號'] == selected_stock]['日期'].dt.strftime('%Y-%m-%d').tolist()
