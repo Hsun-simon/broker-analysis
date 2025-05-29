@@ -1,0 +1,101 @@
+body {
+  font-family: "Microsoft JhengHei", Arial, sans-serif;
+  background-color: #f7f8fc;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+h1, h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.query-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.query-form select,
+.query-form button {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.query-form button {
+  background-color: #3498db;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.query-form button:hover {
+  background-color: #2980b9;
+}
+
+.summary {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2d3436;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #dcdde1;
+  padding: 10px;
+  text-align: center;
+}
+
+.result-table th {
+  background-color: #f1f2f6;
+  color: #2f3542;
+  font-weight: bold;
+}
+
+.result-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.result-table a {
+  color: #0984e3;
+  text-decoration: none;
+}
+
+.result-table a:hover {
+  text-decoration: underline;
+}
+
+.chart-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.chart-container img {
+  max-width: 100%;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+}
