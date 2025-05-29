@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: broker-analysis
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn broker_analysis.wsgi:application
+    staticPublishPath: staticfiles
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DJANGO_DEBUG
+        sync: false
